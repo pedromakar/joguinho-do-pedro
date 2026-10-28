@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+  <title>Joguinho de Palavras — Painel de Especialistas & Protótipos</title>
+  <meta name="description" content="Laboratório de design com 3 protótipos de alta fidelidade para o jogo casual de adivinhação de palavras, desenvolvido com foco em UX, Acessibilidade e Design Visual.">
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=JetBrains+Mono:wght@500;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#10b981">
+</head>
+<body data-theme="midnight" data-colorblind="false">
+
+  <!-- BARRA DO PAINEL DE ESPECIALISTAS & SELETOR DE PROTÓTIPOS -->
+  <aside class="specialists-topbar" aria-label="Painel de Especialistas e Protótipos">
+    <div class="topbar-inner">
+      <div class="brand-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-title">LAB DE DESIGN • 3 PROTÓTIPOS</span>
+      </div>
+
+      <!-- Seletor de Protótipos -->
+      <div class="prototype-selector" role="tablist" aria-label="Alternar entre os 3 protótipos">
+        <button type="button" class="proto-btn active" role="tab" aria-selected="true" id="btn-proto-1" data-proto="midnight">
+          <span class="proto-num">01</span>
+          <span class="proto-name">Midnight Emerald</span>
+          <span class="proto-tag">Sleek Dark</span>
+        </button>
+        <button type="button" class="proto-btn" role="tab" aria-selected="false" id="btn-proto-2" data-proto="neon">
+          <span class="proto-num">02</span>
+          <span class="proto-name">Neon High-Contrast</span>
+          <span class="proto-tag">Ultra A11y</span>
+        </button>
+        <button type="button" class="proto-btn" role="tab" aria-selected="false" id="btn-proto-3" data-proto="editorial">
+          <span class="proto-num">03</span>
+          <span class="proto-name">Neo-Editorial</span>
+          <span class="proto-tag">Paper & Ink</span>
+        </button>
+      </div>
+
+      <!-- Ações Rápidas de Avaliação -->
+      <div class="topbar-actions">
+        <button type="button" class="topbar-btn" id="btn-toggle-colorblind" title="Alternar Símbolos de Acessibilidade (Daltonismo)" aria-pressed="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="action-label">Modo Daltônico</span>
+        </button>
+        <button type="button" class="topbar-btn" id="btn-open-panel" title="Ver parecer do Painel de Especialistas">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="action-label">Parecer do Painel</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTAINER PRINCIPAL DO JOGO -->
+  <main class="game-viewport" id="game-container">
+    
+    <!-- CABEÇALHO DO APLICATIVO -->
+    <header class="app-header">
+      <div class="header-left">
+        <button type="button" class="icon-button" id="btn-help" aria-label="Como Jogar" title="Instruções">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+        <button type="button" class="icon-button" id="btn-calendar" aria-label="Calendário de Desafios" title="Calendário de Acertos e Dias Anteriores">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="15" r="2"/></svg>
+        </button>
+        <div class="mode-pill" id="mode-indicator" title="Clique para ver o calendário">
+          <span class="pill-dot"></span>
+          <span class="pill-text" id="mode-text">HOJE • DIA #42</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <h1 class="logo-title" id="app-logo">PALAVREIO</h1>
+      </div>
+
+      <div class="header-right">
+        <button type="button" class="icon-button" id="btn-sound" aria-label="Efeitos Sonoros" title="Alternar Som" aria-pressed="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+        <button type="button" class="icon-button" id="btn-stats" aria-label="Estatísticas do Jogador" title="Ver Estatísticas">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- BARRA DE SELEÇÃO DE FORMATO: TERMO, DUETO, QUARTETO -->
+    <div class="mode-switch-wrapper">
+      <div class="mode-segmented-control" role="group" aria-label="Formatos de Jogo">
+        <button type="button" class="seg-btn active" id="btn-game-termo" data-gametype="termo">
+          <span class="seg-num">1</span> TERMO
+        </button>
+        <button type="button" class="seg-btn" id="btn-game-dueto" data-gametype="dueto">
+          <span class="seg-num">2</span> DUETO
+        </button>
+        <button type="button" class="seg-btn" id="btn-game-quarteto" data-gametype="quarteto">
+          <span class="seg-num">4</span> QUARTETO
+        </button>
+      </div>
+
+      <button type="button" class="btn-play-again-header" id="btn-quick-new-game" title="Jogar uma nova palavra agora">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Nova Palavra
+      </button>
+    </div>
+
+    <!-- NOTIFICAÇÃO TOAST FLUTUANTE -->
+    <div class="toast-container" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- ÁREA DA GRADE DE PALAVRAS (TERMO, DUETO OU QUARTETO) -->
+    <section class="board-container" id="board-container" aria-label="Grade do jogo de palavras">
+      <div id="board-area" class="board-area-termo">
+        <!-- Tabuleiros gerados dinamicamente via JavaScript -->
+      </div>
+    </section>
+
+    <!-- TECLADO VIRTUAL ERGONÔMICO (3 LINHAS) -->
+    <section class="keyboard-container" aria-label="Teclado Virtual">
+      <!-- Linha 1 -->
+      <div class="keyboard-row">
+        <button type="button" class="key" data-key="Q">Q</button>
+        <button type="button" class="key" data-key="W">W</button>
+        <button type="button" class="key key-correct" data-key="E">E</button>
+        <button type="button" class="key key-present" data-key="R">R</button>
+        <button type="button" class="key key-absent" data-key="T">T</button>
+        <button type="button" class="key" data-key="Y">Y</button>
+        <button type="button" class="key" data-key="U">U</button>
+        <button type="button" class="key" data-key="I">I</button>
+        <button type="button" class="key key-absent" data-key="O">O</button>
+        <button type="button" class="key key-absent" data-key="P">P</button>
+      </div>
+
+      <!-- Linha 2 -->
+      <div class="keyboard-row">
+        <button type="button" class="key key-absent" data-key="A">A</button>
+        <button type="button" class="key" data-key="S">S</button>
+        <button type="button" class="key key-correct" data-key="D">D</button>
+        <button type="button" class="key" data-key="F">F</button>
+        <button type="button" class="key" data-key="G">G</button>
+        <button type="button" class="key" data-key="H">H</button>
+        <button type="button" class="key" data-key="J">J</button>
+        <button type="button" class="key" data-key="K">K</button>
+        <button type="button" class="key" data-key="L">L</button>
+      </div>
+
+      <!-- Linha 3 -->
+      <div class="keyboard-row">
+        <button type="button" class="key key-action key-enter" data-key="ENTER" aria-label="Confirmar tentativa">ENTER</button>
+        <button type="button" class="key" data-key="Z">Z</button>
+        <button type="button" class="key" data-key="X">X</button>
+        <button type="button" class="key" data-key="C">C</button>
+        <button type="button" class="key" data-key="V">V</button>
+        <button type="button" class="key" data-key="B">B</button>
+        <button type="button" class="key" data-key="N">N</button>
+        <button type="button" class="key key-absent" data-key="M">M</button>
+        <button type="button" class="key key-action key-backspace" data-key="BACKSPACE" aria-label="Apagar letra">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- BARRA INFERIOR DE DEMONSTRAÇÃO E FEEDBACK RÁPIDO -->
+    <footer class="demo-footer">
+      <div class="prototype-notes-badge" id="proto-description">
+        <span class="notes-icon">✨</span>
+        <span class="notes-text" id="proto-notes">Protótipo 01: <strong>Midnight Emerald</strong> — Dark luxury com glassmorphism, tons ardósia e verde esmeralda luminosa.</span>
+      </div>
+      <div class="footer-btn-group">
+        <button type="button" class="btn-secondary" id="btn-restart-game">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Reiniciar Grade
+        </button>
+        <button type="button" class="btn-primary" id="btn-simulate-win">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          Simular Vitória (Confetes & Modal)
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- MODAL: PARECER DO PAINEL DE ESPECIALISTAS -->
+  <div class="modal-backdrop" id="modal-panel" aria-hidden="true">
+    <div class="modal-card modal-large" role="dialog" aria-modal="true" aria-labelledby="modal-panel-title">
+      <div class="modal-header">
+        <div class="modal-header-meta">
+          <span class="tag-expert">Conselho de Especialistas</span>
+          <h2 id="modal-panel-title">Parecer dos 3 Especialistas sobre o PRD</h2>
+        </div>
+        <button type="button" class="modal-close" data-close="modal-panel" aria-label="Fechar">✕</button>
+      </div>
+      <div class="modal-body panel-grid">
+        
+        <!-- Especialista 1: UX -->
+        <article class="expert-card card-ux">
+          <div class="expert-header">
+            <div class="expert-avatar">UX</div>
+            <div>
+              <h3>Dra. Clara Silveira</h3>
+              <p class="expert-role">Especialista em UX & Interação Mobile</p>
+            </div>
+          </div>
+          <div class="expert-content">
+            <h4>Decisões Estratégicas no Protótipo:</h4>
+            <ul>
+              <li><strong>Thumb Zone & Altura Bloqueada (100dvh):</strong> O layout é fixado na viewport móvel para eliminar rolagens verticais indesejadas enquanto o jogador digita.</li>
+              <li><strong>Teclado Físico + Virtual Sincronizados:</strong> Usuários desktop podem digitar direto no teclado físico com feedback imediato; no celular, as teclas possuem área de toque generosa (mínimo 44px).</li>
+              <li><strong>Eliminação de Fricção em Acentos:</strong> Digitação normalizada sem botão de acento, inserindo grafias corretas (`Ç`, `Ã`, `É`) automaticamente na revelação.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Especialista 2: Acessibilidade -->
+        <article class="expert-card card-a11y">
+          <div class="expert-header">
+            <div class="expert-avatar">A11Y</div>
+            <div>
+              <h3>Lucas Albuquerque</h3>
+              <p class="expert-role">Especialista em Acessibilidade Web (WCAG 2.2 AAA)</p>
+            </div>
+          </div>
+          <div class="expert-content">
+            <h4>Decisões Estratégicas no Protótipo:</h4>
+            <ul>
+              <li><strong>Codificação Dupla (Dual-Coding):</strong> O jogo não depende exclusivamente de cor. Através do "Modo Daltônico", símbolos táteis (`✓` correto, `↔` posição errada, `✕` ausente) garantem legibilidade para deutaranopia e protanopia.</li>
+              <li><strong>Semântica ARIA & Leitores de Tela:</strong> A grade possui `role="grid"` com células que anunciam claramente "Linha X, letra Y, status", e notificações utilizam `aria-live="polite"`.</li>
+              <li><strong>Relação de Contraste > 7:1:</strong> Cores ajustadas para cumprir critérios estritos de legibilidade mesmo sob luz solar direta em dispositivos móveis.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Especialista 3: Design Visual -->
+        <article class="expert-card card-visual">
+          <div class="expert-header">
+            <div class="expert-avatar">UI</div>
+            <div>
+              <h3>Mariana Rios</h3>
+              <p class="expert-role">Diretora de Arte & Game Feel</p>
+            </div>
+          </div>
+          <div class="expert-content">
+            <h4>Os 3 Conceitos Visuais Criados:</h4>
+            <ul>
+              <li><strong>01. Midnight Emerald (Dark Luxury):</strong> Fundo ardósia cósmica `#070B14`, esmeralda luminescente `#10B981`, sensação premium e moderna similar aos melhores apps nativos contemporâneos.</li>
+              <li><strong>02. Neon High-Contrast (Cyberpunk Arcade):</strong> Fundo preto puro OLED, ciano elétrico e dourado ultra vibrante com bordas geométricas e badges táteis evidentes.</li>
+              <li><strong>03. Neo-Editorial (Papercraft & Ink):</strong> Visual clássico de quebra-cabeça de jornal reinventado, com tipografia serifada de prestígio, fundo carvão fosco e tons de mostarda e floresta.</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-primary" data-close="modal-panel">Entendido, Voltar ao Jogo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ESTATÍSTICAS E COMPARTILHAMENTO -->
+  <div class="modal-backdrop" id="modal-stats" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-stats-title">
+      <div class="modal-header">
+        <h2 id="modal-stats-title">Estatísticas do Jogador</h2>
+        <button type="button" class="modal-close" data-close="modal-stats" aria-label="Fechar">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Métricas Principais -->
+        <div class="stats-kpi-grid">
+          <div class="kpi-item">
+            <span class="kpi-value" id="stat-played">18</span>
+            <span class="kpi-label">Jogadas</span>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-value" id="stat-winrate">94%</span>
+            <span class="kpi-label">Vitórias</span>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-value highlight-kpi" id="stat-streak">12</span>
+            <span class="kpi-label">Sequência Atual</span>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-value" id="stat-maxstreak">15</span>
+            <span class="kpi-label">Melhor Sequência</span>
+          </div>
+        </div>
+
+        <!-- Histograma de Distribuição de Tentativas -->
+        <div class="stats-distribution">
+          <h3>Distribuição de Tentativas</h3>
+          <div class="dist-chart">
+            <div class="dist-row">
+              <span class="dist-label">1</span>
+              <div class="dist-bar-track"><div class="dist-bar" style="width: 10%;">1</div></div>
+            </div>
+            <div class="dist-row">
+              <span class="dist-label">2</span>
+              <div class="dist-bar-track"><div class="dist-bar" style="width: 25%;">4</div></div>
+            </div>
+            <div class="dist-row current-guess-row">
+              <span class="dist-label">3</span>
+              <div class="dist-bar-track"><div class="dist-bar highlight-bar" style="width: 50%;">8</div></div>
+            </div>
+            <div class="dist-row">
+              <span class="dist-label">4</span>
+              <div class="dist-bar-track"><div class="dist-bar" style="width: 20%;">3</div></div>
+            </div>
+            <div class="dist-row">
+              <span class="dist-label">5</span>
+              <div class="dist-bar-track"><div class="dist-bar" style="width: 6%;">1</div></div>
+            </div>
+            <div class="dist-row">
+              <span class="dist-label">6</span>
+              <div class="dist-bar-track"><div class="dist-bar" style="width: 0%;">0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações pós-jogo: Replay e Calendário -->
+        <div class="post-game-actions">
+          <button type="button" class="btn-primary btn-replay" id="btn-replay-new-word">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            Jogar de Novo (Outra Palavra)
+          </button>
+          <button type="button" class="btn-secondary" id="btn-open-calendar-from-stats">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Jogar Outro Dia no Calendário
+          </button>
+        </div>
+
+        <!-- Box de Compartilhamento Social Sem Spoiler -->
+        <div class="share-box">
+          <div class="share-preview">
+            <p id="share-title">Joguinho do Pedro — Termo #42</p>
+            <p class="emoji-grid" id="share-emojis">
+              ⬛🟩🟨⬛⬛<br>
+              ⬛🟩🟩🟨⬛<br>
+              🟩🟩🟩🟩🟩
+            </p>
+          </div>
+          <button type="button" class="btn-share" id="btn-share-result">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Compartilhar Resultado
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CALENDÁRIO DE ACERTOS E DIAS ANTERIORES -->
+  <div class="modal-backdrop" id="modal-calendar" aria-hidden="true">
+    <div class="modal-card modal-calendar-card" role="dialog" aria-modal="true" aria-labelledby="modal-cal-title">
+      <div class="modal-header">
+        <div class="modal-header-meta">
+          <span class="tag-expert">Histórico de Partidas</span>
+          <h2 id="modal-cal-title">Calendário de Desafios</h2>
+        </div>
+        <button type="button" class="modal-close" data-close="modal-calendar" aria-label="Fechar">✕</button>
+      </div>
+      <div class="modal-body cal-modal-body">
+        <div class="cal-nav">
+          <button type="button" class="cal-nav-btn" id="cal-prev-month" aria-label="Mês anterior">◀</button>
+          <span class="cal-month-title" id="cal-month-name">Outubro 2026</span>
+          <button type="button" class="cal-nav-btn" id="cal-next-month" aria-label="Próximo mês">▶</button>
+        </div>
+
+        <div class="cal-weekdays">
+          <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span>
+        </div>
+
+        <div class="cal-days-grid" id="cal-days-grid">
+          <!-- Gerado dinamicamente via JS -->
+        </div>
+
+        <div class="cal-legend">
+          <div class="legend-item"><span class="legend-dot dot-won"></span> Acertou (tentativas)</div>
+          <div class="legend-item"><span class="legend-dot dot-lost"></span> Errou</div>
+          <div class="legend-item"><span class="legend-dot dot-unplayed"></span> Não jogou (clique para jogar)</div>
+        </div>
+      </div>
+      <div class="modal-footer cal-footer">
+        <button type="button" class="btn-primary" id="btn-play-today">Jogar Palavra de Hoje</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: COMO JOGAR (INSTRUÇÕES) -->
+  <div class="modal-backdrop" id="modal-help" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-help-title">
+      <div class="modal-header">
+        <h2 id="modal-help-title">Como Jogar</h2>
+        <button type="button" class="modal-close" data-close="modal-help" aria-label="Fechar">✕</button>
+      </div>
+      <div class="modal-body instructions-body">
+        <p>Adivinhe a palavra secreta de <strong>5 letras</strong>:</p>
+        <ul style="padding-left: 20px; margin-bottom: 8px;">
+          <li><strong>TERMO:</strong> 1 palavra secreta em 6 tentativas.</li>
+          <li><strong>DUETO:</strong> 2 palavras simultâneas em 7 tentativas.</li>
+          <li><strong>QUARTETO:</strong> 4 palavras simultâneas em 9 tentativas.</li>
+        </ul>
+        <p>A cada palpite, os blocos mudam de cor para mostrar o quão perto você está:</p>
+
+        <div class="instruction-example">
+          <div class="example-row">
+            <div class="tile status-correct"><span class="letter">T</span><span class="symbol-tag">✓</span></div>
+            <div class="tile"><span class="letter">U</span></div>
+            <div class="tile"><span class="letter">R</span></div>
+            <div class="tile"><span class="letter">M</span></div>
+            <div class="tile"><span class="letter">A</span></div>
+          </div>
+          <p class="example-desc"><strong class="highlight-green">Verde:</strong> A letra <strong>T</strong> faz parte da palavra e está na posição exata.</p>
+        </div>
+
+        <div class="instruction-example">
+          <div class="example-row">
+            <div class="tile"><span class="letter">V</span></div>
+            <div class="tile status-present"><span class="letter">I</span><span class="symbol-tag">↔</span></div>
+            <div class="tile"><span class="letter">O</span></div>
+            <div class="tile"><span class="letter">L</span></div>
+            <div class="tile"><span class="letter">A</span></div>
+          </div>
+          <p class="example-desc"><strong class="highlight-amber">Amarelo:</strong> A letra <strong>I</strong> faz parte da palavra, mas em outra posição.</p>
+        </div>
+
+        <div class="instruction-example">
+          <div class="example-row">
+            <div class="tile"><span class="letter">P</span></div>
+            <div class="tile"><span class="letter">O</span></div>
+            <div class="tile"><span class="letter">N</span></div>
+            <div class="tile status-absent"><span class="letter">T</span><span class="symbol-tag">✕</span></div>
+            <div class="tile"><span class="letter">O</span></div>
+          </div>
+          <p class="example-desc"><strong class="highlight-gray">Cinza:</strong> A letra <strong>T</strong> não faz parte da palavra.</p>
+        </div>
+
+        <div class="tip-box">
+          <p><strong>Dica de Português:</strong> Não se preocupe com acentos ou cedilha ao digitar. O jogo adiciona acentos automaticamente ao validar!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANVAS PARA CONFETES -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="words.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
